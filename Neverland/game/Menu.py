@@ -49,6 +49,7 @@ print (p.FULLSCREEN)
 #Fonts
 p.font.init()
 #all non-SysFont fonts are made by "Chequered Ink"
+titleScrn=p.font.Font("Neverland\Fonts\Rrquartet-B5wd.ttf", 130)
 popup = p.font.Font("Neverland\Fonts\AGoblinAppears-o2aV.ttf",12)
 fancy= p.font.Font("Neverland\Fonts\AncientModernTales-a7Po.ttf", 100)
 TITLE_FNT= p.font.SysFont("timesnewroman", 80)
@@ -101,11 +102,12 @@ def PopUpM(message):
         xt= WIDTH/2-txt.get_width()/2
         screen.blit(txt,(xt,HEIGHT*.016))
 def FancyM(message):
-    txt=fancy.render(message, 1, (255, 255, 255))
+    txt=titleScrn.render(message, 1, (43, 40, 36))
     #get width of the text
     #x value = WIDTH/2 - wtext
     xt= WIDTH/2-txt.get_width()/2
-    screen.blit(txt,(xt,HEIGHT*.0714))
+    screen.blit(txt,(xt,HEIGHT*.2))
+
 def TitleMenu(message):
     txt=TITLE_FNT.render(message, 1, (255, 255, 255))
     #get width of the text
@@ -185,6 +187,7 @@ ym=mouse_pos[1]
 while check:
     keys=p.key.get_pressed()
     if TITLE:
+        bg=ttlScrn
         screen.blit(bg,(0,0))
         FancyM("Escaping Neverland")
     if MAIN:
