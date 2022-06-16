@@ -20,7 +20,10 @@ hb=30
 #IMAGES#
 ttlScrn=p.image.load('Neverland\Images\Backgrounds\\title.png')
 ttlScrn=p.transform.scale(ttlScrn,(WIDTH,HEIGHT))
+menu=p.image.load("Neverland\Images\Backgrounds\Menu.png")
+menu=p.transform.scale(menu,(WIDTH,HEIGHT))
 bg=ttlScrn
+
 #declare constants/ windows
 TITLE=True
 MAIN=False
@@ -29,14 +32,12 @@ SETT=False
 BACKCLR=False
 CRCLR=False
 SIZE=False
-LEV_1=False
-LEV_2=False
-LEV_3=False
+GAME=False
 PSCORE1=False
 SCOREBOARD=False
 EXIT=False
 #lists fr messages
-MenuList=["Instructions", 'Settings', '  Level 1', "Exit"]
+MenuList=["Start Adventure", 'How to play', 'Settings', "Exit"]
 SettingList=[ 'Background Color', 'Avatar','Screen size']
 BackColorList=['Aqua',"Magenta", "Yellow", "Orange"]
 CrClrList=['Green', "White", "Lilac", "Navy"]
@@ -50,8 +51,9 @@ print (p.FULLSCREEN)
 p.font.init()
 #all non-SysFont fonts are made by "Chequered Ink"
 titleScrn=p.font.Font("Neverland\Fonts\Rrquartet-B5wd.ttf", 130)
+menuScrn=p.font.Font("Neverland\Fonts\Rrquartet-B5wd.ttf", 80)
 popup = p.font.Font("Neverland\Fonts\AGoblinAppears-o2aV.ttf",12)
-fancy= p.font.Font("Neverland\Fonts\AncientModernTales-a7Po.ttf", 100)
+fancy= p.font.Font("Neverland\Fonts\AncientModernTales-a7Po.ttf", 30)
 TITLE_FNT= p.font.SysFont("timesnewroman", 80)
 SUBT_FNT= p.font.SysFont("comicsans", 40)
 MENU_FNT= p.font.SysFont("arial", 50)
@@ -83,8 +85,8 @@ squareG=p.Rect(xsg, ysg, wbox, hbox)
 square=p.Rect(xs,ys,wb,hb)
 #Define Colors
 colors={'white': [255,255,255], 'red': [255,0,0], 'orange':[255, 85, 0], 'navy':[5, 31, 64], 
-'forest':[16, 46, 12],'aqua':[51, 153, 255], 'pink': [200,75,125], 'litpur':[203,160,227],
-'mag':[255, 0, 255], 'yellow':[240, 180, 14] }
+'forest':[36, 76, 32],'aqua':[51, 153, 255], 'pink': [200,75,125], 'litpur':[203,160,227],
+'mag':[255, 0, 255], 'yellow':[240, 180, 14], 'brown': [45, 55, 38] }
 #Get colors
 # background=colors.get('pink')
 sq_color=colors.get('navy')
@@ -102,18 +104,23 @@ def PopUpM(message):
         xt= WIDTH/2-txt.get_width()/2
         screen.blit(txt,(xt,HEIGHT*.016))
 def FancyM(message):
-    txt=titleScrn.render(message, 1, (43, 40, 36))
+    txt=titleScrn.render(message, 1, (colors.get('brown')))
     #get width of the text
     #x value = WIDTH/2 - wtext
     xt= WIDTH/2-txt.get_width()/2
-    screen.blit(txt,(xt,HEIGHT*.2))
-
+    screen.blit(txt,(xt,HEIGHT*.3))
+def toCon(message):
+    txt=fancy.render(message, 1, (colors.get('forest')))
+    #get width of the text
+    #x value = WIDTH/2 - wtext
+    xt= WIDTH/2-txt.get_width()/2
+    screen.blit(txt,(xt,HEIGHT*.65))
 def TitleMenu(message):
-    txt=TITLE_FNT.render(message, 1, (255, 255, 255))
+    txt=menuScrn.render(message, 1, (colors.get('brown')))
     #get width of the text
     #x value = WIDTH/2 - wtext
     xt= WIDTH/2-txt.get_width()/2
-    screen.blit(txt,(xt,50))
+    screen.blit(txt,(WIDTH*.42,HEIGHT*0.08))
 
 def ReturnBut(message):
     txt=MENU_FNT.render(message, 1, (255, 255, 255))
@@ -126,26 +133,24 @@ def round_up(n, decimals=0):
 # got this from https://realpython.com/python-rounding/#rounding-up
 #this function uses parameters fr menu
 def mainmenu(Mlist):
-    txty=245
+    txty=HEIGHT*.279
     square.y=250
     for i in range(len(Mlist)):
         message=Mlist[i]
-        txt=INST_FNT.render(message, 1, (5, 31, 64) )
-        screen.blit(txt, (90,txty))
-        txty+=50
-        p.draw.rect(screen, sqM_color, square)
-        square.y+=50
+        txt=fancy.render(message, 1, (colors.get('forest')) )
+        screen.blit(txt, (WIDTH*.434,txty))
+        txty+=75
   
 def instr(): 
      
-    txt=INST_FNT.render("Control the circle with the arrow keys", 1,(5, 31, 64))
+    txt=INST_FNT.render("the path you take is a forgotton track.", 1,(colors.get('forest')))
     xt= WIDTH/2-txt.get_width()/2
     screen.blit(txt,(xt,200))
-    txt=INST_FNT.render("and absorb the square. If there is a ", 1, (5, 31, 64)) 
+    txt=INST_FNT.render("Keep your eyes wide for a way back.", 1, (colors.get('forest'))) 
     screen.blit(txt,(xt,240))
-    txt=INST_FNT.render("second player, control the square with",1, (5, 31, 64))
+    txt=INST_FNT.render("do not wander when darkness falls",1, (colors.get('forest')))
     screen.blit(txt, (xt,280))
-    txt=INST_FNT.render("the wasd keys. You got to be quick!",1, (5, 31, 64))
+    txt=INST_FNT.render("for you have a chance to lose it all.",1, (colors.get('forest')))
     screen.blit(txt, (xt,320)) 
 
 
@@ -190,9 +195,11 @@ while check:
         bg=ttlScrn
         screen.blit(bg,(0,0))
         FancyM("Escaping Neverland")
+        toCon("Press Space Bar")
     if MAIN:
+        bg=menu
         screen.blit(bg,(0,0))
-        FancyM("Escaping Neverland")
+        TitleMenu("Escaping Neverland")
         mainmenu(MenuList)
     if INSTR:
         screen.blit(bg,(0,0))
@@ -226,28 +233,32 @@ while check:
     for event in p.event.get():
         if event.type == p.QUIT:
             check = False 
+    keys=p.key.get_pressed()
     #Mouse Controls
     #Menu Navigation
+    if TITLE:
+        if keys[p.K_SPACE]:
+            mouse_pos=((WIDTH/2, HEIGHT*.07))
+            TITLE=False
+            MAIN=True
+            mouse_pos=((WIDTH/2, HEIGHT*.07))
+            
     if event.type ==p.MOUSEBUTTONDOWN:
         mouse_pos=p.mouse.get_pos()
         print(mouse_pos)
-        
         if MAIN:
             eaten=0
             rad=15
-            if ((mouse_pos[0] >50 and mouse_pos[0] <80) and (mouse_pos[1] >250 and mouse_pos[1] <280))or INSTR:
+            if ((mouse_pos[0] >WIDTH*0.434 and mouse_pos[0] <WIDTH*.624) and (mouse_pos[1] >HEIGHT*.268 and mouse_pos[1] <HEIGHT*.313)):
                 MAIN=False
-                screen.fill(bg)
-                INSTR=True
-            if((mouse_pos[0] >50 and mouse_pos[0] <80) and (mouse_pos[1] >300 and mouse_pos[1] <330))or SETT:
+                GAME=True
+            if((mouse_pos[0] >WIDTH*0.434 and mouse_pos[0] <WIDTH*.557) and (mouse_pos[1] >HEIGHT*.402 and mouse_pos[1] <HEIGHT*.447)):
                 MAIN=False 
-                SETT=True
-                p.time.delay(300)
-                mouse_pos=(0,0)    
-            if ((mouse_pos[0] >50 and mouse_pos[0] <80) and (mouse_pos[1] >350 and mouse_pos[1] <380))or LEV_1:
+                INSTR=True   
+            if ((mouse_pos[0] >WIDTH*0.434 and mouse_pos[0] <WIDTH*.523) and (mouse_pos[1] >HEIGHT*.530 and mouse_pos[1] <HEIGHT*.577)):
                 MAIN=False
-                LEV_1=True
-            if ((mouse_pos[0] >50 and mouse_pos[0] <80) and (mouse_pos[1] >400 and mouse_pos[1] <430))or LEV_2:
+                SETT=True
+            if ((mouse_pos[0] >WIDTH*0.434 and mouse_pos[0] <WIDTH*.483) and (mouse_pos[1] >HEIGHT*.659 and mouse_pos[1] <HEIGHT*.695)):
                 MAIN=False
                 EXIT=True
 
@@ -314,7 +325,7 @@ while check:
                 mouse_pos=(0,0)
                 
         #return to Menu
-        if not MAIN and not LEV_1:
+        if not MAIN:
             if ((mouse_pos[0] >210 and mouse_pos[0] <490) and (mouse_pos[1] >561 and mouse_pos[1] <595))or MAIN:
                 if INSTR:
                     INSTR=False
@@ -330,61 +341,9 @@ while check:
                     MAIN=True
 
     #THE GAME Level 1##########################################################3###############################################################################
-    if LEV_1:
-        screen.fill(bg)
-        # Game Controls
-        #squareG control
-        if keys[p.K_a] and squareG.x>=move :
-            squareG.x -= move 
-        if keys[p.K_d] and squareG.x <=WIDTH-(wbox+move):
-            squareG.x += move
-        #jumping part
-        if not JUMP:
-            if keys[p.K_w] and squareG.y>=move:
-                squareG.y -= move  
-            if keys[p.K_s] and squareG.y<=HEIGHT-(hbox+move):
-                squareG.y += move 
-            if keys[p.K_SPACE]:
-                JUMP=True
-        else:
-            if jumpCount>=-MAX:
-                squareG.y -= jumpCount*abs(jumpCount)/2
-                jumpCount-=1
-            else:
-                jumpCount=MAX
-                JUMP=False
-        #circle control
-        if keys[p.K_LEFT] and xc >=rad+move:
-            xc -= move
-        if keys[p.K_RIGHT] and xc<=WIDTH-(rad+move):
-            xc += move
-        if keys[p.K_UP] and yc>=rad+move:
-            yc -= move
-        if keys[p.K_DOWN] and yc<=HEIGHT-(rad+move):
-            yc+= move
-        
-        checkCollide=squareG.collidepoint((xc,yc))
-        if checkCollide:
-            squareG.x=random.randint(wbox, WIDTH-wbox)
-            squareG.y=random.randint(hbox, HEIGHT-hbox)
-            rad+=grow
-        ibox=rad*math.sqrt(2)
-        xig= xc-(ibox/2)
-        yig= yc-(ibox/2)
-        inscribSq=p.Rect(xig,yig,ibox,ibox)
-        sqCollide=squareG.colliderect((inscribSq))
-        if sqCollide:
-            squareG.x=random.randint(wbox, WIDTH-wbox)
-            squareG.y=random.randint(hbox, HEIGHT-hbox)
-            changeClr()
-            sq_color=colors.get(randColor)  
-            rad+=grow
-            eaten+=1
-            # secs=Something to track the amount of time played
-    
-        p.draw.rect(screen,sq_color, squareG)    
-        p.draw.circle(screen,cr_color, (xc,yc), rad)
-        p.draw.rect(screen,inscribSq_color, inscribSq)
+    if GAME:
+        print("work")
+
 
 
     p.display.update()
