@@ -16,6 +16,9 @@ xs=50
 ys=250
 wb=30
 hb=30
+howCount=0
+shadowtick=0
+
 #######################################################################################################################################################
 #IMAGES#
 ttlScrn=p.image.load('Neverland\Images\Backgrounds\\title.png')
@@ -66,7 +69,7 @@ Howto19=p.transform.scale(Howto19,(WIDTH,HEIGHT))
 Howto20=p.transform.scale(Howto20,(WIDTH,HEIGHT))
 Howto21=p.transform.scale(Howto21,(WIDTH,HEIGHT))
 Howto22=p.transform.scale(Howto22,(WIDTH,HEIGHT))
-
+HowTo=[Howto1, Howto2, Howto3, Howto4, Howto5, Howto6, Howto7, Howto8, Howto9, Howto10, Howto11, Howto12, Howto13, Howto14, Howto15, Howto16, Howto17, Howto18, Howto19, Howto20, Howto21, Howto22, Howto21, Howto20, Howto19, Howto18, Howto17, Howto16, Howto15, Howto14, Howto13, Howto12, Howto11,Howto10, Howto9, Howto8, Howto7, Howto6, Howto5, Howto5, Howto4, Howto3, Howto2]
 bg=ttlScrn
 
 #declare constants/ windows
@@ -237,19 +240,35 @@ ym=mouse_pos[1]
 while check:
     keys=p.key.get_pressed()
     if TITLE:
+        print(shadowtick)
         bg=ttlScrn
         screen.blit(bg,(0,0))
         FancyM("Escaping Neverland")
         toCon("Press Space Bar")
     if MAIN:
+        print(shadowtick)
         bg=menu
         screen.blit(bg,(0,0))
         TitleMenu("Escaping Neverland")
         mainmenu(MenuList)
     if INSTR:
-        screen.blit(bg,(0,0))
-        TitleMenu("Instructions")
-        ReturnBut("Return to Menu")
+        light=True
+        Dark=False
+        if howCount >=210:
+            howCount=0
+        if howCount==209:
+            shadowtick+=1
+        if light:
+            screen.blit(HowTo[howCount//5], (0,0))
+            howCount+=1
+        # if Dark:
+
+        if shadowtick==100:
+            light=False
+            Dark=True
+
+        
+        ReturnBut("back")
         instr()
     if SETT: 
         screen.blit(bg,(0,0))
