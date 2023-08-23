@@ -238,13 +238,15 @@ while check:
         if howCount==209:
             shadowtick+=1
         if light:
+            
             screen.blit(HowTo[howCount//5], (0,0))
             howCount+=1
+            print(shadowtick)
             ReturnBut("back",colors.get('forest') )
             instr()
         # if Dark:
 
-        if shadowtick==100:
+        if shadowtick==50:
             light=False
             Dark=True
 
